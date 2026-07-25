@@ -37,19 +37,19 @@ services:
       DB_PASSWORD: postgres
       DB_DRIVER: org.postgresql.Driver
 
-      # Telegram
-      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN:-8612217816:AAE1gHnsMO8PhKnaTU43kBnfcwK-M98cURY}
-      TELEGRAM_BOT_USERNAME: ${TELEGRAM_BOT_USERNAME:-oldgamer_shop_bot}
-      TELEGRAM_CHANNEL_ID: ${TELEGRAM_CHANNEL_ID:--1001234567890}
+      # Telegram (set via .env file on VPS)
+      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
+      TELEGRAM_BOT_USERNAME: ${TELEGRAM_BOT_USERNAME}
+      TELEGRAM_CHANNEL_ID: ${TELEGRAM_CHANNEL_ID}
 
-      # Claude API
-      CLAUDE_API_KEY: ${CLAUDE_API_KEY:-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}
+      # Claude API (set via .env file on VPS)
+      CLAUDE_API_KEY: ${CLAUDE_API_KEY}
 
-      # RAWG API
-      RAWG_API_KEY: ${RAWG_API_KEY:-b0ac172a102344eea91a745d1e338fab}
+      # RAWG API (set via .env file on VPS)
+      RAWG_API_KEY: ${RAWG_API_KEY}
 
-      # Giant Bomb API
-      GIANTBOMB_API_KEY: ${GIANTBOMB_API_KEY:-562bf4e8903624cdeaaaec9a241fb5086c1af1da}
+      # Giant Bomb API (set via .env file on VPS)
+      GIANTBOMB_API_KEY: ${GIANTBOMB_API_KEY}
 
       # Spring
       SPRING_APPLICATION_NAME: oldgamer-bot
