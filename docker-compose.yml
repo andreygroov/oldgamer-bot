@@ -9,27 +9,14 @@ services:
       POSTGRES_PASSWORD: postgres
     ports:
       - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-      - ./schema.sql:/docker-entrypoint-initdb.d/schema.sql
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    networks:
-      - oldgamer-network
-    command: postgres -c log_statement=all
+    restart: on-failure
 
   # Old Gamer Bot
   bot:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: oldgamer-bot:latest
     container_name: oldgamer-bot
     depends_on:
-      postgres:
-        condition: service_healthy
+      - postgres
     environment:
       # Database
       DB_URL: jdbc:postgresql://postgres:5432/oldgamer_bot
@@ -37,18 +24,18 @@ services:
       DB_PASSWORD: postgres
       DB_DRIVER: org.postgresql.Driver
 
-      # Telegram (set via .env file on VPS)
+      # Telegram
       TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
       TELEGRAM_BOT_USERNAME: ${TELEGRAM_BOT_USERNAME}
       TELEGRAM_CHANNEL_ID: ${TELEGRAM_CHANNEL_ID}
 
-      # Claude API (set via .env file on VPS)
+      # Claude API
       CLAUDE_API_KEY: ${CLAUDE_API_KEY}
 
-      # RAWG API (set via .env file on VPS)
+      # RAWG API
       RAWG_API_KEY: ${RAWG_API_KEY}
 
-      # Giant Bomb API (set via .env file on VPS)
+      # Giant Bomb API
       GIANTBOMB_API_KEY: ${GIANTBOMB_API_KEY}
 
       # Spring
@@ -58,16 +45,5 @@ services:
 
     ports:
       - "8080:8080"
-    networks:
-      - oldgamer-network
     restart: on-failure
-    stdin_open: true
-    tty: true
-
-volumes:
-  postgres_data:
-    driver: local
-
-networks:
-  oldgamer-network:
-    driver: bridge
+    env_file: .env
