@@ -1,0 +1,75 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: oldgamer-postgres
+    environment:
+      POSTGRES_DB: oldgamer_bot
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./schema.sql:/docker-entrypoint-initdb.d/schema.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - oldgamer-network
+    command: postgres -c log_statement=all
+
+  # Old Gamer Bot
+  bot:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: oldgamer-bot
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      # Database
+      DB_URL: jdbc:postgresql://postgres:5432/oldgamer_bot
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_DRIVER: org.postgresql.Driver
+
+      # Telegram
+      TELEGRAM_BOT_TOKEN: 8612217816:AAE1gHnsMO8PhKnaTU43kBnfcwK-M98cURY
+      TELEGRAM_BOT_USERNAME: oldgamer_shop_bot
+      TELEGRAM_CHANNEL_ID: -1001234567890
+
+      # Claude API
+      CLAUDE_API_KEY: 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
+
+      # RAWG API
+      RAWG_API_KEY: b0ac172a102344eea91a745d1e338fab
+
+      # Giant Bomb API
+      GIANTBOMB_API_KEY: 562bf4e8903624cdeaaaec9a241fb5086c1af1da
+
+      # Spring
+      SPRING_APPLICATION_NAME: oldgamer-bot
+      LOGGING_LEVEL_ROOT: INFO
+      LOGGING_LEVEL_COM_OLDGAMER_BOT: DEBUG
+
+    ports:
+      - "8080:8080"
+    networks:
+      - oldgamer-network
+    restart: on-failure
+    stdin_open: true
+    tty: true
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  oldgamer-network:
+    driver: bridge

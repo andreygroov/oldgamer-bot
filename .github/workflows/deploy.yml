@@ -1,0 +1,72 @@
+name: Deploy to VPS
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install sshpass
+        run: sudo apt-get install -y sshpass
+
+      - name: Deploy to VPS
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
+          SSH_PORT: ${{ secrets.SSH_PORT }}
+        run: |
+          # Create .ssh directory if not exists
+          mkdir -p ~/.ssh
+
+          # Disable strict host key checking
+          echo "StrictHostKeyChecking no" >> ~/.ssh/config
+
+          # SSH and update on VPS
+          sshpass -p "$SSH_PASSWORD" ssh -o ConnectTimeout=5 $SSH_USER@$SSH_HOST -p $SSH_PORT << 'EOFSH'
+          set -e
+
+          echo "Starting deployment..."
+
+          # Navigate to project directory
+          cd /opt/oldgamer-bot
+
+          # Pull latest code
+          echo "Pulling latest code from GitHub..."
+          git pull origin main || git pull origin master
+
+          # Pull latest Docker images
+          echo "Pulling Docker images..."
+          docker-compose pull
+
+          # Start containers
+          echo "Starting containers..."
+          docker-compose up -d
+
+          # Show status
+          echo "Containers status:"
+          docker-compose ps
+
+          echo "Deployment completed successfully!"
+          EOFSH
+
+      - name: Verify Deployment
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
+          SSH_PORT: ${{ secrets.SSH_PORT }}
+        run: |
+          mkdir -p ~/.ssh
+          echo "StrictHostKeyChecking no" >> ~/.ssh/config
+
+          sshpass -p "$SSH_PASSWORD" ssh -o ConnectTimeout=5 $SSH_USER@$SSH_HOST -p $SSH_PORT << 'EOFSH'
+          echo "Checking bot status..."
+          docker-compose -f /opt/oldgamer-bot/docker-compose.yml ps
+          EOFSH

@@ -1,0 +1,42 @@
+spring:
+  application:
+    name: oldgamer-bot
+
+# Database Configuration
+db:
+  url: jdbc:postgresql://localhost:5432/oldgamer_bot
+  user: postgres
+  password: postgres
+  driver: org.postgresql.Driver
+
+# Telegram Bot Configuration
+telegram:
+  bot:
+    token: ${TELEGRAM_BOT_TOKEN:8612217816:AAE1gHnsMO8PhKnaTU43kBnfcwK-M98cURY}
+    username: ${TELEGRAM_BOT_USERNAME:oldgamer_shop_bot}
+  channel:
+    id: ${TELEGRAM_CHANNEL_ID:-1001234567890}
+
+# Claude API Configuration
+claude:
+  api:
+    key: ${CLAUDE_API_KEY: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}
+  model: claude-3-5-sonnet-20241022
+
+# RAWG.io API Configuration (free, no auth needed for basic tier)
+rawg:
+  api:
+    key: ${RAWG_API_KEY:b0ac172a102344eea91a745d1e338fab}
+
+# Giant Bomb API Configuration (free, no 2FA)
+giantbomb:
+  api:
+    key: ${GIANTBOMB_API_KEY:562bf4e8903624cdeaaaec9a241fb5086c1af1da}
+
+# Logging
+logging:
+  level:
+    root: INFO
+    com.oldgamer.bot: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"

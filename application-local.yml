@@ -1,0 +1,33 @@
+# Local development configuration
+spring:
+  profiles:
+    active: local
+
+db:
+  url: jdbc:postgresql://localhost:5432/oldgamer_bot_dev
+  user: postgres
+  password: your_local_password
+  driver: org.postgresql.Driver
+
+telegram:
+  bot:
+    token: YOUR_TEST_BOT_TOKEN
+    username: YourTestBotUsername
+  channel:
+    id: YOUR_TEST_CHANNEL_ID
+
+claude:
+  api:
+    key: YOUR_CLAUDE_API_KEY
+
+igdb:
+  client:
+    id: YOUR_IGDB_CLIENT_ID
+  access:
+    token: YOUR_IGDB_ACCESS_TOKEN
+
+logging:
+  level:
+    root: INFO
+    com.oldgamer.bot: DEBUG
+    org.springframework: DEBUG
