@@ -26,12 +26,12 @@ psql -U postgres oldgamer_bot < schema.sql
 
 **✅ Telegram Bot:**
 ```
-TOKEN: 8612217816:AAE1gHnsMO8PhKnaTU43kBnfcwK-M98cURY
+TOKEN: <YOUR_TELEGRAM_BOT_TOKEN>
 ```
 
 **✅ Claude API:**
 ```
-KEY: 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
+KEY: <YOUR_CLAUDE_API_KEY>
 ```
 
 **⏳ RAWG.io API (бесплатно, без 2FA):**
@@ -55,14 +55,14 @@ KEY: sk-ant-api03-dUkXUJKxVnEawkgYxYiGvLFSY2iSWY-HUXnfmVbvxKzpKYYMitUI9oYRrnfetq
 ```yaml
 telegram:
   bot:
-    token: 8612217816:AAE1gHnsMO8PhKnaTU43kBnfcwK-M98cURY
+    token: <YOUR_TELEGRAM_BOT_TOKEN>
     username: oldgamer_shop_bot
   channel:
     id: -1001234567890
 
 claude:
   api:
-    key: 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
+    key: <YOUR_CLAUDE_API_KEY>
   model: claude-3-5-sonnet-20241022
 
 rawg:

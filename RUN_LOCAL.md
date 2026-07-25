@@ -186,7 +186,7 @@ mvn -v  # Должно быть 3.6+
 ```yaml
 claude:
   api:
-    key: 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
+    key: <YOUR_CLAUDE_API_KEY>
 ```
 
 ---
